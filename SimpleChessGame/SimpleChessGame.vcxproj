@@ -97,6 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,6 +113,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -123,13 +125,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array2D.hpp" />
+    <ClInclude Include="AvailableMoves.hpp" />
     <ClInclude Include="Board.hpp" />
     <ClInclude Include="ChessPiece.hpp" />
+    <ClInclude Include="ClassicalArrangement.hpp" />
     <ClInclude Include="Constants.hpp" />
-    <ClInclude Include="ISystem.hpp" />
-    <ClInclude Include="Rect.hpp" />
-    <ClInclude Include="Vector2.hpp" />
-    <ClInclude Include="World.hpp" />
+    <ClInclude Include="ClassicalChessRules.hpp" />
+    <ClInclude Include="MoveData.hpp" />
+    <ClInclude Include="Types.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "Constants.hpp"
+#include "Board.hpp"
+#include "ClassicalArrangement.hpp"
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -9,6 +11,8 @@ int main(int argc, char* argv[])
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
+
+	Board<12, 12, ClassicalChessRules, ClassicalArrangement> mainBoard;
 
 	sf::Clock timer;
 	while (window.isOpen())

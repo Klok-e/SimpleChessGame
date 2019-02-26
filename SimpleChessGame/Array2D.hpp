@@ -8,19 +8,19 @@ namespace Game
 	class Array2D
 	{
 	public:
-		T const& operator[](size_t i) const noexcept
+		T const& operator[](Types::ui32 i) const noexcept
 		{
 			return _data[i];
 		}
-		T& operator[](size_t i) noexcept
+		T& operator[](Types::ui32 i) noexcept
 		{
 			return _data[i];
 		}
-		T const& at(size_t row, size_t col) const noexcept
+		T const& at(Types::ui32 row, Types::ui32 col) const noexcept
 		{
 			return _data[columns*row + col];
 		}
-		T& at(size_t row, size_t col) noexcept
+		T& at(Types::ui32 row, Types::ui32 col) noexcept
 		{
 			return _data[columns*row + col];
 		}

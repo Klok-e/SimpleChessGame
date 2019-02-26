@@ -1,47 +1,35 @@
 #pragma once
 
-#include "Rect.hpp"
+#include "Types.hpp"
 
 namespace Game
 {
-	class ChessPiece
+	struct ChessPiece
 	{
-	public:
 		enum class PieceType
 		{
-			Pawn = 0,
-			Rook = 1,
-			Knight = 2,
-			Bishop = 3,
-			Queen = 4,
-			King = 5,
-		} const _type;
+			Undefined = 0,
+			Pawn = 1,
+			Rook = 2,
+			Knight = 3,
+			Bishop = 4,
+			Queen = 5,
+			King = 6,
+		} _type = PieceType::Undefined;
 
-		ChessPiece(PieceType type) :
-			_type(type)
+		Types::ui32 _id = 0;
+
+		bool _player = false;
+
+		ChessPiece(PieceType type, Types::ui32 id, bool player) :
+			_type(type),
+			_id(id),
+			_player(player)
 		{
 		}
 
-		void GetMoves(Vector2<int> pos)
+		ChessPiece()
 		{
-			switch (_type)
-			{
-				case PieceType::Pawn:
-					break;
-				case PieceType::Rook:
-					break;
-				case PieceType::Knight:
-					break;
-				case PieceType::Bishop:
-					break;
-				case PieceType::Queen:
-					break;
-				case PieceType::King:
-					break;
-			}
 		}
-
-	private:
-
 	};
 }
