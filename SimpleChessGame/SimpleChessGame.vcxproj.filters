@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Sprites">
+      <UniqueIdentifier>{3ad58690-4d27-41da-84fa-118d7559d5d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -23,29 +26,55 @@
     <ClInclude Include="Constants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChessPiece.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Board.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Array2D.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveData.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AvailableMoves.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ClassicalChessRules.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ClassicalArrangement.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Sprites256px\b_bishop_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\b_king_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\b_knight_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\b_pawn_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\b_queen_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\b_rook_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\square brown dark_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\square brown light_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\square gray dark _png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\square gray light _png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_bishop_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_king_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_knight_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_pawn_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_queen_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="Sprites256px\w_rook_png_shadow_256px.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>

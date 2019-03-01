@@ -9,7 +9,7 @@
 #include "AvailableMoves.hpp"
 #include "ClassicalArrangement.hpp"
 
-namespace Game
+namespace Engine
 {
 	template<Types::ui32 rows, Types::ui32 columns,
 		template<Types::ui32 rows, Types::ui32 columns> class Rules,
@@ -17,7 +17,8 @@ namespace Game
 	class Board
 	{
 	public:
-		Board()
+		Board() :
+			_state()
 		{
 			Arrangement<rows, columns> arrangement;
 			arrangement.Arrange(_state);
@@ -28,31 +29,35 @@ namespace Game
 		{
 		}
 
-		Array2D<std::optional<ChessPiece>, rows, columns> const& GetState()
+		auto GetState()->Array2D<std::optional<ChessPiece>, rows, columns> const&
 		{
 			return _state;
 		}
 
-		std::vector<ChessPiece> const& DoTurn(Types::ui32 moveInd)
+		auto DoTurn(Types::ui32 moveInd)->std::optional<ChessPiece>
 		{
 			_playersTurn = !_playersTurn;
 
 			auto move = _currentPlayerMoves.data[moveInd];
 
-			// capture if there's anything
-			if (_state.at(move.toRow, move.toCol))
-				_wereCaptured.push_back(_state.at(move.toRow, move.toCol).value());
-
 			// move piece
-			_state.at(move.toRow, move.toCol) = _state.at(move.fromRow, move.fromCol);
+			_state.at(move.ToRow(), move.ToCol()) = _state.at(move.FromRow(), move.FromCol());
 
 			// remove piece from previous position
-			_state.at(move.fromRow, move.fromCol).reset();
+			_state.at(move.FromRow(), move.FromCol()).reset();
 
-			return _wereCaptured;
+			// capture if there's anything
+			std::optional<ChessPiece> capt;
+			if (move.Capt())
+			{
+				capt = _state.at(move.Capt().value());
+				_state.at(move.Capt().value()).reset();
+			}
+
+			return capt;
 		}
 
-		AvailableMoves const& ConstructAvailableMovesForTurn()
+		auto ConstructAvailableMovesForTurn()->AvailableMoves const&
 		{
 			_rules.GetAvailableMovesForTurn(_currentPlayerMoves, _playersTurn, _state);
 			return _currentPlayerMoves;
@@ -64,7 +69,6 @@ namespace Game
 		Rules<rows, columns> _rules;
 
 		AvailableMoves _currentPlayerMoves;
-		std::vector<ChessPiece> _wereCaptured;
 
 		MoveData _currentPlayerMove;
 

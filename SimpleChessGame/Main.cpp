@@ -4,15 +4,21 @@
 #include "ClassicalArrangement.hpp"
 #include <iostream>
 
-int main(int argc, char* argv[])
+auto main(int argc, char* argv[])->int
 {
+	using namespace Engine;
 	using namespace Game;
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+	window.setFramerateLimit(Consts::FPS);
+
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
 	Board<12, 12, ClassicalChessRules, ClassicalArrangement> mainBoard;
+	mainBoard.ConstructAvailableMovesForTurn();
+	mainBoard.DoTurn(0);
+	mainBoard.GetState();
 
 	sf::Clock timer;
 	while (window.isOpen())
@@ -27,9 +33,5 @@ int main(int argc, char* argv[])
 		window.clear();
 		window.draw(shape);
 		window.display();
-
-		auto elapsed = timer.restart();
-		if (Consts::MS_PER_FRAME > elapsed)
-			sf::sleep(Consts::MS_PER_FRAME - elapsed);
 	}
 }

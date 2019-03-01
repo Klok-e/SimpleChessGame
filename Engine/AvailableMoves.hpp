@@ -3,7 +3,7 @@
 #include <vector>
 #include "MoveData.hpp"
 
-namespace Game
+namespace Engine
 {
 	struct AvailableMoves
 	{

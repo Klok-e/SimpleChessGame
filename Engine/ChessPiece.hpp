@@ -2,7 +2,7 @@
 
 #include "Types.hpp"
 
-namespace Game
+namespace Engine
 {
 	struct ChessPiece
 	{
