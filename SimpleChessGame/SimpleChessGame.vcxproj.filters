@@ -16,6 +16,12 @@
     <Filter Include="Resource Files\Sprites">
       <UniqueIdentifier>{3ad58690-4d27-41da-84fa-118d7559d5d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ResourcesStuff">
+      <UniqueIdentifier>{514c8840-6e12-4c0d-9007-0da3517897ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS">
+      <UniqueIdentifier>{d7325e58-1000-405c-94e7-22f5aff0a49f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -25,6 +31,27 @@
   <ItemGroup>
     <ClInclude Include="Constants.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources.hpp">
+      <Filter>Header Files\ResourcesStuff</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ISystem.hpp">
+      <Filter>Header Files\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -76,5 +103,10 @@
     <Image Include="Sprites256px\w_rook_png_shadow_256px.png">
       <Filter>Resource Files\Sprites</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="generate_Resources_sprites.py">
+      <Filter>Header Files\ResourcesStuff</Filter>
+    </None>
   </ItemGroup>
 </Project>

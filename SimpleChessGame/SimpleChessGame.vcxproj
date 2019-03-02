@@ -91,6 +91,9 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link />
+    <PostBuildEvent>
+      <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -102,6 +105,9 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link />
+    <PostBuildEvent>
+      <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -119,6 +125,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -136,15 +145,27 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components.hpp" />
     <ClInclude Include="Constants.hpp" />
+    <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="ISystem.hpp" />
+    <ClInclude Include="Meta.hpp" />
+    <ClInclude Include="RenderSystem.hpp" />
+    <ClInclude Include="Resources.hpp" />
+    <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Sprites256px\b_bishop_png_shadow_256px.png" />
+    <Image Include="Sprites256px\b_bishop_png_shadow_256px.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="Sprites256px\b_king_png_shadow_256px.png" />
     <Image Include="Sprites256px\b_knight_png_shadow_256px.png" />
     <Image Include="Sprites256px\b_pawn_png_shadow_256px.png" />
@@ -162,6 +183,9 @@
     <Image Include="Sprites256px\w_pawn_png_shadow_256px.png" />
     <Image Include="Sprites256px\w_queen_png_shadow_256px.png" />
     <Image Include="Sprites256px\w_rook_png_shadow_256px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="generate_Resources_sprites.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

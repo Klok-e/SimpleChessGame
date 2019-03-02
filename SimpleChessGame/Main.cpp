@@ -3,6 +3,11 @@
 #include "Board.hpp"
 #include "ClassicalArrangement.hpp"
 #include <iostream>
+#include "Resources.hpp"
+#include "World.hpp"
+#include "Components.hpp"
+#include "RenderSystem.hpp"
+#include "ISystem.hpp"
 
 auto main(int argc, char* argv[])->int
 {
@@ -20,6 +25,16 @@ auto main(int argc, char* argv[])->int
 	mainBoard.DoTurn(0);
 	mainBoard.GetState();
 
+	RenderSystem x;
+	decltype(x)::componentsRequired;
+
+	World<std::tuple<Components::Renderable, Components::Position2D>,
+		std::tuple<RenderSystem>> world;
+
+	world.CreateEntity(Components::Renderable(sf::Sprite(Resources::Inst().get_b_bishop_png_shadow_256px_png())));
+
+	world.Update();
+
 	sf::Clock timer;
 	while (window.isOpen())
 	{
@@ -31,7 +46,7 @@ auto main(int argc, char* argv[])->int
 		}
 
 		window.clear();
-		window.draw(shape);
+		//window.draw(x);
 		window.display();
 	}
 }
