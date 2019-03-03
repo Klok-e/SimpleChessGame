@@ -11,9 +11,9 @@
 
 namespace Engine
 {
-	template<Types::ui32 rows, Types::ui32 columns,
-		template<Types::ui32 rows, Types::ui32 columns> class Rules,
-		template<Types::ui32 rows, Types::ui32 columns> class Arrangement>
+	template<Types::u32 rows, Types::u32 columns,
+		template<Types::u32 rows, Types::u32 columns> class Rules,
+		template<Types::u32 rows, Types::u32 columns> class Arrangement>
 	class Board
 	{
 	public:
@@ -34,7 +34,7 @@ namespace Engine
 			return _state;
 		}
 
-		auto DoTurn(Types::ui32 moveInd)->std::optional<ChessPiece>
+		auto DoTurn(Types::u32 moveInd)->std::optional<ChessPiece>
 		{
 			_playersTurn = !_playersTurn;
 

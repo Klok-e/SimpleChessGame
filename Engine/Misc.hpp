@@ -10,4 +10,15 @@ namespace Engine::Misc
 		if (opt)
 			function(opt.value);
 	}
+
+	template<typename InputIter, typename ToFindType>
+	auto find_index_of(InputIter begin, InputIter end, ToFindType const& value)->size_t
+	{
+		size_t count = 0;
+		for (InputIter i = begin; i != end; i++, count++)
+			if (value == *i)
+			{
+				return count;
+			}
+	}
 }

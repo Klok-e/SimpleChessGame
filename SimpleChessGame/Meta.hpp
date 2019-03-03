@@ -2,6 +2,8 @@
 
 #include <tuple>
 #include <type_traits>
+#include <array>
+#include <algorithm>
 
 namespace Game
 {
@@ -57,12 +59,34 @@ namespace Game
 		static constexpr bool value = decltype(is_derived_from::test(std::declval<Derived>()))::value;
 	};
 
-	template<template<typename> typename Left, typename RightTuple>
-	struct put_every_right_in_left;
-
 	template<template<typename> typename Left, typename...Right>
-	struct put_every_right_in_left<Left, std::tuple<Right...>>
+	struct put_every_right_in_left
 	{
 		static constexpr std::tuple<Left<Right>...> value;
+	};
+
+	template<template<int> typename Left, typename numbersContainer>
+	struct put_every_right_index_plus1_in_left_impl;
+
+	template<template<int> typename Left, Engine::Types::u32... numbers>
+	struct put_every_right_index_plus1_in_left_impl<Left, std::index_sequence<numbers...>>
+	{
+		typedef std::tuple<Left<numbers + 1>...> value;
+	};
+
+	template<template<int> typename Left, typename...Right>
+	struct put_every_right_index_plus1_in_left
+	{
+		typedef typename put_every_right_index_plus1_in_left_impl<Left, std::make_index_sequence<sizeof...(Right)>>::value value;
+	};
+
+	template<template<int> typename Left, typename...Right>
+	using  put_every_right_index_pl1_in_left_t = typename put_every_right_index_plus1_in_left< Left, Right...>::value;
+
+	template<template<typename> typename Container, template<Engine::Types::u32> typename Type>
+	struct make_template_int_container_type
+	{
+		template<Engine::Types::u32 number>
+		using value = Container<Type<number>>;
 	};
 }

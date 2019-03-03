@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	template<Types::ui32 rows, Types::ui32 columns>
+	template<Types::u32 rows, Types::u32 columns>
 	class ClassicalChessRules
 	{
 	public:
@@ -76,8 +76,8 @@ namespace Engine
 
 		auto IsGameFinished(Array2D<std::optional<ChessPiece>, rows, columns> const& state)->bool
 		{
-			Types::ui32 p1 = 0, p2 = 0;
-			for (Types::ui32 i = 0; i < rows*columns; i++)
+			Types::u32 p1 = 0, p2 = 0;
+			for (Types::u32 i = 0; i < rows*columns; i++)
 				if (auto piece = state[i])
 					(piece->_player ? p1 : p2) += 1;
 			if (p1 == 0
@@ -89,11 +89,11 @@ namespace Engine
 		}
 
 	private:
-		Types::ui32 _turnsFinished = 0;
+		Types::u32 _turnsFinished = 0;
 
-		std::unordered_set<Types::ui32> _pawnsThatDidFirstMove;
+		std::unordered_set<Types::u32> _pawnsThatDidFirstMove;
 
-		constexpr auto CoordsOnBoard(Types::ui32 row, Types::ui32 col) const noexcept -> bool
+		constexpr auto CoordsOnBoard(Types::u32 row, Types::u32 col) const noexcept -> bool
 		{
 			return row < rows && col < columns;
 		}

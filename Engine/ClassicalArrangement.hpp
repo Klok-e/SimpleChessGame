@@ -7,13 +7,13 @@
 
 namespace Engine
 {
-	template<Types::ui32 rows, Types::ui32 columns>
+	template<Types::u32 rows, Types::u32 columns>
 	class ClassicalArrangement
 	{
 	public:
 		auto Arrange(Array2D<std::optional<ChessPiece>, rows, columns>& state)->void
 		{
-			Types::ui32 count = 0;
+			Types::u32 count = 0;
 			for (auto[col, row] : state)
 			{
 				switch (row)

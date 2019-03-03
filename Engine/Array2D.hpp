@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	template<class T, Types::ui32 rows, Types::ui32 columns>
+	template<class T, Types::u32 rows, Types::u32 columns>
 	class Array2D
 	{
 	public:
@@ -15,12 +15,12 @@ namespace Engine
 		class Iter2D
 		{
 		public:
-			using value_type = Vec2<Types::ui32>; //almost always T
-			using reference = Vec2<Types::ui32>const&; //almost always T& or const T&
-			using pointer = Vec2<Types::ui32>const*; //almost always T* or const T*
+			using value_type = Vec2<Types::u32>; //almost always T
+			using reference = Vec2<Types::u32>const&; //almost always T& or const T&
+			using pointer = Vec2<Types::u32>const*; //almost always T* or const T*
 			using iterator_category = std::forward_iterator_tag;  //usually std::forward_iterator_tag or similar
 
-			Iter2D(Types::ui32 x, Types::ui32 y) :
+			Iter2D(Types::u32 x, Types::u32 y) :
 				x(x),
 				y(y)
 			{
@@ -37,7 +37,7 @@ namespace Engine
 			}
 			auto operator*() const->value_type
 			{
-				return Vec2<Types::ui32>(x, y);
+				return Vec2<Types::u32>(x, y);
 			}
 			auto operator==(const Iter2D& other) const&->bool
 			{
@@ -49,7 +49,7 @@ namespace Engine
 			}
 
 		private:
-			Types::ui32 x, y;
+			Types::u32 x, y;
 		};
 
 		auto begin() const->Iter2D
@@ -64,36 +64,36 @@ namespace Engine
 #pragma endregion
 
 #pragma region Operators
-		auto operator[](Types::ui32 i) const noexcept->T const&
+		auto operator[](Types::u32 i) const noexcept->T const&
 		{
 			return _data[i];
 		}
 
-		auto operator[](Types::ui32 i) noexcept->T&
+		auto operator[](Types::u32 i) noexcept->T&
 		{
 			return _data[i];
 		}
 #pragma endregion
 
 #pragma region at overloads
-		auto at(Types::ui32 row, Types::ui32 col) const noexcept->T const&
+		auto at(Types::u32 row, Types::u32 col) const noexcept->T const&
 		{
 			return _data[columns*row + col];
 		}
 
-		auto at(Types::ui32 row, Types::ui32 col) noexcept->T&
+		auto at(Types::u32 row, Types::u32 col) noexcept->T&
 		{
 			return _data[columns*row + col];
 		}
 
-		auto at(Vec2<Types::ui32> col_row) const noexcept->T const&
+		auto at(Vec2<Types::u32> col_row) const noexcept->T const&
 		{
 			auto col = col_row.x;
 			auto row = col_row.y;
 			return _data[columns*row + col];
 		}
 
-		auto at(Vec2<Types::ui32> col_row) noexcept->T&
+		auto at(Vec2<Types::u32> col_row) noexcept->T&
 		{
 			auto col = col_row.x;
 			auto row = col_row.y;

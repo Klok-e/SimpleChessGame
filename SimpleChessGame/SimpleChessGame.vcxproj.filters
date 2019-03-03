@@ -53,6 +53,12 @@
     <ClInclude Include="ISystem.hpp">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="ArchetypeContainer.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="static_map.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sprites256px\b_bishop_png_shadow_256px.png">

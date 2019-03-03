@@ -13,81 +13,81 @@ namespace Engine
 		{
 		}
 
-		MoveData(Types::ui32 ToRow, Types::ui32 ToCol, Types::ui32 FromRow, Types::ui32 FromCol) :
+		MoveData(Types::u32 ToRow, Types::u32 ToCol, Types::u32 FromRow, Types::u32 FromCol) :
 			_to(ToCol, ToRow),
 			_from(FromCol, FromRow)
 		{
 		}
 
-		MoveData(Types::ui32 ToRow, Types::ui32 ToCol, Types::ui32 FromRow, Types::ui32 FromCol, Types::ui32 CaptRow, Types::ui32 CaptCol) :
+		MoveData(Types::u32 ToRow, Types::u32 ToCol, Types::u32 FromRow, Types::u32 FromCol, Types::u32 CaptRow, Types::u32 CaptCol) :
 			_to(ToCol, ToRow),
 			_from(FromCol, FromRow),
 			_captured(std::in_place, CaptRow, CaptCol)
 		{
 		}
 
-		MoveData(Vec2<Types::ui32> _to, Vec2<Types::ui32> _from) :
+		MoveData(Vec2<Types::u32> _to, Vec2<Types::u32> _from) :
 			_to(_to),
 			_from(_from)
 		{
 		}
 
-		MoveData(Vec2<Types::ui32> _to, Vec2<Types::ui32> _from, Vec2<Types::ui32> Capt) :
+		MoveData(Vec2<Types::u32> _to, Vec2<Types::u32> _from, Vec2<Types::u32> Capt) :
 			_to(_to),
 			_from(_from),
 			_captured(std::in_place, Capt)
 		{
 		}
 
-		auto To()->Vec2<Types::ui32>
+		auto To()->Vec2<Types::u32>
 		{
 			return _to;
 		}
 
-		auto From()->Vec2<Types::ui32>
+		auto From()->Vec2<Types::u32>
 		{
 			return _from;
 		}
 
-		auto Capt()->std::optional<Vec2<Types::ui32>>
+		auto Capt()->std::optional<Vec2<Types::u32>>
 		{
 			return _captured;
 		}
 
-		auto ToCol()->Types::ui32
+		auto ToCol()->Types::u32
 		{
 			return _to.x;
 		}
 
-		auto ToRow()->Types::ui32
+		auto ToRow()->Types::u32
 		{
 			return _to.y;
 		}
 
-		auto FromCol()->Types::ui32
+		auto FromCol()->Types::u32
 		{
 			return _from.x;
 		}
 
-		auto FromRow()->Types::ui32
+		auto FromRow()->Types::u32
 		{
 			return _from.y;
 		}
 
-		auto CaptCol()->std::optional<Types::ui32>
+		auto CaptCol()->std::optional<Types::u32>
 		{
-			return _captured ? _captured->x : std::make_optional<Types::ui32>();
+			return _captured ? _captured->x : std::make_optional<Types::u32>();
 		}
 
-		auto CaptRow()->std::optional<Types::ui32>
+		auto CaptRow()->std::optional<Types::u32>
 		{
-			return _captured ? _captured->y : std::make_optional<Types::ui32>();
+			return _captured ? _captured->y : std::make_optional<Types::u32>();
 		}
 
 	private:
-		Vec2<Types::ui32> _to;
-		Vec2<Types::ui32> _from;
+		Vec2<Types::u32> _to;
+		Vec2<Types::u32> _from;
 
-		std::optional<Vec2<Types::ui32>> _captured;
+		std::optional<Vec2<Types::u32>> _captured;
 	};
 }

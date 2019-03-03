@@ -17,11 +17,11 @@ namespace Engine
 			King = 6,
 		} _type = PieceType::Undefined;
 
-		Types::ui32 _id = 0;
+		Types::u32 _id = 0;
 
 		bool _player = false;
 
-		ChessPiece(PieceType type, Types::ui32 id, bool player) :
+		ChessPiece(PieceType type, Types::u32 id, bool player) :
 			_type(type),
 			_id(id),
 			_player(player)
