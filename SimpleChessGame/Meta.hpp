@@ -7,8 +7,8 @@
 
 namespace Game
 {
-	template<typename T, typename... Ts>
-	constexpr bool contains = (std::is_same_v<T, Ts> || ...);
+	template<typename TypeToGetIndexOf, typename... Ts>
+	constexpr bool contains = (std::is_same_v<TypeToGetIndexOf, Ts> || ...);
 
 	template<typename... Elements>
 	struct set
@@ -29,10 +29,10 @@ namespace Game
 		(f(std::integral_constant<std::size_t, Is>{}, std::get<Is>(t)), ...);
 	}
 
-	template <class ... T, class Func >
-	constexpr void static_for(std::tuple<T...>&t, Func &&f)
+	template <class ... TypeToGetIndexOf, class Func >
+	constexpr void static_for(std::tuple<TypeToGetIndexOf...>&t, Func &&f)
 	{
-		static_for_impl(t, std::forward<Func>(f), std::make_index_sequence<sizeof...(T)>{});
+		static_for_impl(t, std::forward<Func>(f), std::make_index_sequence<sizeof...(TypeToGetIndexOf)>{});
 	}
 
 	template <class Tup, class Func, std::size_t ...Is>
@@ -41,10 +41,10 @@ namespace Game
 		(f(std::get<Is>(t)), ...);
 	}
 
-	template <class ... T, class Func >
-	constexpr void static_foreach(std::tuple<T...>&t, Func &&f)
+	template <class ... TypeToGetIndexOf, class Func >
+	constexpr void static_foreach(std::tuple<TypeToGetIndexOf...>&t, Func &&f)
 	{
-		static_foreach_impl(t, std::forward<Func>(f), std::make_index_sequence<sizeof...(T)>{});
+		static_foreach_impl(t, std::forward<Func>(f), std::make_index_sequence<sizeof...(TypeToGetIndexOf)>{});
 	}
 
 	template<template<class...> class Base, class Derived>
@@ -81,12 +81,27 @@ namespace Game
 	};
 
 	template<template<int> typename Left, typename...Right>
-	using  put_every_right_index_pl1_in_left_t = typename put_every_right_index_plus1_in_left< Left, Right...>::value;
+	using  put_every_right_index_pl1_in_left_t = typename put_every_right_index_plus1_in_left<Left, Right...>::value;
 
 	template<template<typename> typename Container, template<Engine::Types::u32> typename Type>
 	struct make_template_int_container_type
 	{
 		template<Engine::Types::u32 number>
 		using value = Container<Type<number>>;
+	};
+
+	template <class TypeToGetIndexOf, class Tuple>
+	struct get_type_index;
+
+	template <class TypeToGetIndexOf, class... Types>
+	struct get_type_index<TypeToGetIndexOf, std::tuple<TypeToGetIndexOf, Types...>>
+	{
+		static constexpr std::size_t value = 0;
+	};
+
+	template <class TypeToGetIndexOf, class U, class... Types>
+	struct get_type_index<TypeToGetIndexOf, std::tuple<U, Types...>>
+	{
+		static constexpr std::size_t value = 1 + get_type_index<TypeToGetIndexOf, std::tuple<Types...>>::value;
 	};
 }

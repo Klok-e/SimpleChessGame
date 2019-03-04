@@ -2,42 +2,42 @@
 
 namespace Engine
 {
-	template<class T>
+	template<class TypeToGetIndexOf>
 	struct Vec2
 	{
-		T x, y;
+		TypeToGetIndexOf x, y;
 
 		Vec2()
 		{
 		}
 
-		Vec2(T x, T y) :
+		Vec2(TypeToGetIndexOf x, TypeToGetIndexOf y) :
 			x(x),
 			y(y)
 		{
 		}
 	};
 
-	template<class T>
-	auto operator+(Vec2<T> left, Vec2<T> right) -> Vec2<T>
+	template<class TypeToGetIndexOf>
+	auto operator+(Vec2<TypeToGetIndexOf> left, Vec2<TypeToGetIndexOf> right) -> Vec2<TypeToGetIndexOf>
 	{
 		return Vec2(left.x + right.x, left.y + right.y);
 	}
 
-	template<class T>
-	auto operator-(Vec2<T> left, Vec2<T> right) -> Vec2<T>
+	template<class TypeToGetIndexOf>
+	auto operator-(Vec2<TypeToGetIndexOf> left, Vec2<TypeToGetIndexOf> right) -> Vec2<TypeToGetIndexOf>
 	{
 		return Vec2(left.x - right.x, left.y - right.y);
 	}
 
-	template<class T>
-	auto operator*(Vec2<T> left, Vec2<T> right) -> Vec2<T>
+	template<class TypeToGetIndexOf>
+	auto operator*(Vec2<TypeToGetIndexOf> left, Vec2<TypeToGetIndexOf> right) -> Vec2<TypeToGetIndexOf>
 	{
 		return Vec2(left.x * right.x, left.y * right.y);
 	}
 
-	template<class T>
-	auto operator/(Vec2<T> left, Vec2<T> right) -> Vec2<T>
+	template<class TypeToGetIndexOf>
+	auto operator/(Vec2<TypeToGetIndexOf> left, Vec2<TypeToGetIndexOf> right) -> Vec2<TypeToGetIndexOf>
 	{
 		return Vec2(left.x / right.x, left.y / right.y);
 	}

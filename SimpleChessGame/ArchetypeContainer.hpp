@@ -16,47 +16,55 @@ namespace Game
 	public:
 		using u32 = Engine::Types::u32;
 		using componentIndex = u32;
+		static constexpr u32 componentsCount = ComponentsCount;
 
-		class TotallySafeArrayWrapper
+		class ICanBecomeDangling
 		{
 		public:
-			TotallySafeArrayWrapper(char* ptr, size_t _vectorSize) :
-				_ptr(ptr),
-				_vectSz(_vectorSize)
-			{
-			}
-
 			void SetIsNowDangling()
 			{
 				_isTotallyNotDangling = false;
 			}
 
-			template<typename Type>
-			Type& operator[](u32 i)
-			{
-				if (!_isTotallyNotDangling
-					||
-					_vectSz % sizeof(Type) != 0)
-					std::terminate();
+		protected:
+			bool _isTotallyNotDangling = true;
+		};
 
-				return reinterpret_cast<Type*>(_ptr)[i];
+		template<typename CompType>
+		class TotallySafeArrayWrapper :
+			public ICanBecomeDangling
+		{
+		public:
+			TotallySafeArrayWrapper(char* ptr, size_t size) :
+				_ptr(reinterpret_cast<CompType*>(ptr)),
+				_size(size)
+			{
 			}
 
-			template<typename Type>
-			Type const& operator[](u32 i)const
+			CompType& operator[](u32 i)
 			{
-				if (!_isTotallyNotDangling
-					||
-					_vectSz % sizeof(Type) != 0)
+				if (!_isTotallyNotDangling)
 					std::terminate();
 
-				return reinterpret_cast<Type*>(_ptr)[i];
+				return _ptr[i];
+			}
+
+			CompType const& operator[](u32 i)const
+			{
+				if (!_isTotallyNotDangling)
+					std::terminate();
+
+				return _ptr[i];
+			}
+
+			size_t size()
+			{
+				return _size;
 			}
 
 		private:
-			char* _ptr;
-			bool _isTotallyNotDangling = true;
-			size_t _vectSz;
+			CompType* _ptr;
+			size_t _size;
 		};
 
 
@@ -72,35 +80,41 @@ namespace Game
 			}
 		}
 
+		auto GetComponentIndices()
+		{
+
+		}
+
 		template<typename ComponentType>
-		auto GetComponentArray(componentIndex componentId)->std::tuple<TotallySafeArrayWrapper&, u32>
+		auto GetComponentArray(componentIndex componentId)->TotallySafeArrayWrapper<ComponentType>&
 		{
 			auto tpl = _map.get(componentId, Hash);
 
-			auto vect = std::get<0>(tpl);
-			auto size = std::get<1>(tpl);
+			std::vector<char> vect = std::get<0>(tpl);
+			size_t size = std::get<1>(tpl);
+
+			size_t elementCount = vect.size() / sizeof(ComponentType);
 
 			if (vect.size() % sizeof(ComponentType) != 0)
 				std::terminate();
 
-			_wrappers.push_back(TotallySafeArrayWrapper(vect.data(), size));
+			_wrappers.push_back(std::make_unique<TotallySafeArrayWrapper>(vect.data(), elementCount));
 
-			return std::make_tuple(_wrappers.back(),
-								   vect.size() / sizeof(ComponentType));
+			return *_wrappers.back();
 		}
 
 		auto AddEntity(Entity entity, std::array<std::tuple<componentIndex, size_t>, ComponentsCount> entityComponents)->void
 		{
 			for (auto wrapper : _wrappers)
-				wrapper.SetIsNowDangling();
+				wrapper->SetIsNowDangling();
 
 			for (auto element : entityComponents)
 			{
-				auto index = std::get<0>(element);
-				auto elementSize = std::get<1>(element);
+				componentIndex index = std::get<0>(element);
+				size_t elementSize = std::get<1>(element);
 
-				auto storageVector = std::get<0>(_map.get(index, Hash));
-				auto storageElementSize = std::get<1>(_map.get(index, Hash));
+				std::vector<char> storageVector = std::get<0>(_map.get(index, Hash));
+				size_t storageElementSize = std::get<1>(_map.get(index, Hash));
 
 				if (elementSize != storageElementSize)
 					std::terminate();
@@ -135,7 +149,7 @@ namespace Game
 		auto RemoveEntity(Entity entity)->void
 		{
 			for (auto wrapper : _wrappers)
-				wrapper.SetIsNowDangling();
+				wrapper->SetIsNowDangling();
 
 			size_t entityInd = Engine::Misc::find_index_of(_entities.begin(), _entities.end(), entity);
 			_entities.erase(_entities.begin() + entityInd);
@@ -156,7 +170,7 @@ namespace Game
 
 		std::vector<Entity> _entities;
 
-		std::vector<TotallySafeArrayWrapper> _wrappers;
+		std::vector<std::unique_ptr<ICanBecomeDangling>> _wrappers;
 
 		componentIndex Hash(componentIndex x)
 		{

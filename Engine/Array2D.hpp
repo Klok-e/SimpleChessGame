@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	template<class T, Types::u32 rows, Types::u32 columns>
+	template<class TypeToGetIndexOf, Types::u32 rows, Types::u32 columns>
 	class Array2D
 	{
 	public:
@@ -64,36 +64,36 @@ namespace Engine
 #pragma endregion
 
 #pragma region Operators
-		auto operator[](Types::u32 i) const noexcept->T const&
+		auto operator[](Types::u32 i) const noexcept->TypeToGetIndexOf const&
 		{
 			return _data[i];
 		}
 
-		auto operator[](Types::u32 i) noexcept->T&
+		auto operator[](Types::u32 i) noexcept->TypeToGetIndexOf&
 		{
 			return _data[i];
 		}
 #pragma endregion
 
 #pragma region at overloads
-		auto at(Types::u32 row, Types::u32 col) const noexcept->T const&
+		auto at(Types::u32 row, Types::u32 col) const noexcept->TypeToGetIndexOf const&
 		{
 			return _data[columns*row + col];
 		}
 
-		auto at(Types::u32 row, Types::u32 col) noexcept->T&
+		auto at(Types::u32 row, Types::u32 col) noexcept->TypeToGetIndexOf&
 		{
 			return _data[columns*row + col];
 		}
 
-		auto at(Vec2<Types::u32> col_row) const noexcept->T const&
+		auto at(Vec2<Types::u32> col_row) const noexcept->TypeToGetIndexOf const&
 		{
 			auto col = col_row.x;
 			auto row = col_row.y;
 			return _data[columns*row + col];
 		}
 
-		auto at(Vec2<Types::u32> col_row) noexcept->T&
+		auto at(Vec2<Types::u32> col_row) noexcept->TypeToGetIndexOf&
 		{
 			auto col = col_row.x;
 			auto row = col_row.y;
@@ -102,6 +102,6 @@ namespace Engine
 #pragma endregion
 
 	private:
-		std::array<T, rows*columns> _data;
+		std::array<TypeToGetIndexOf, rows*columns> _data;
 	};
 }

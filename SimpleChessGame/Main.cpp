@@ -25,8 +25,8 @@ auto main(int argc, char* argv[])->int
 	mainBoard.DoTurn(0);
 	mainBoard.GetState();
 
-	RenderSystem x;
-	decltype(x)::componentsRequired;
+	//RenderSystem x;
+	//decltype(x)::componentsRequired;
 
 	World<std::tuple<Components::Renderable, Components::Position2D>,
 		std::tuple<RenderSystem>> world;

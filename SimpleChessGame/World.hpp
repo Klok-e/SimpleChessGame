@@ -24,14 +24,14 @@ namespace Game
 		// all systems must inherit from ISystem
 		static_assert(is_all_true<is_derived_from<ISystem, Systems>::value...>);
 	public:
+		using u32 = Engine::Types::u32;
+
 		World()
 		{
-			auto& x = _archetypeByComponentCount;
-			int y = 0;
 		}
 
 		template<class ...Components>
-		auto CreateEntity(Components&&... values)->void
+		auto CreateEntity(Components... values)->void
 		{
 			// all components must inherit from IComponent
 			static_assert(is_everything_in_set_inherits_from<IComponent, Components...>);
@@ -39,8 +39,9 @@ namespace Game
 			// check whether Components is a subset of ComponentTypes
 			static_assert(set<Components...>::template is_subset_of<ComponentTypes...>);
 
-			((std::get<std::vector<Components>>(_components).push_back(values),
-			  _entities.push_back(Entity(_entityCounter++))), ...);
+
+
+
 		}
 
 		template<typename Component>
@@ -106,13 +107,36 @@ namespace Game
 		}
 
 	private:
-		std::tuple<std::vector<ComponentTypes>...> _components;
-		std::vector<Entity> _entities;
-
 		std::tuple<Systems...> _systems;
 
-		Engine::Types::u32 _entityCounter = 1;
-
 		put_every_right_index_pl1_in_left_t<make_template_int_container_type<std::vector, ArchetypeContainer>::value, ComponentTypes...> _archetypeByComponentCount;
+
+		u32 _entityCounter = 1;
+
+		using allComponents = std::tuple<ComponentTypes...>;
+
+		template<class ...Components>
+		auto FindArchetype()->std::optional<ArchetypeContainer<sizeof...(Components)>&>
+		{
+			// check whether Components is a subset of ComponentTypes
+			static_assert(set<Components...>::template is_subset_of<ComponentTypes...>);
+
+			// get vector of archetypes with appropriate size
+			auto archetypeVect = std::get<sizeof...(Components)>(_archetypeByComponentCount);
+
+			auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [](auto archetype)
+			{
+
+				((get_type_index<Components, allComponents>::value), ...)
+			});
+			if (res != archetypeVect.end())
+			{
+				// found needed archetype
+			}
+			else
+			{
+				// create needed archetype
+			}
+		}
 	};
 }

@@ -13,6 +13,12 @@ namespace Game
 		class Iter
 		{
 		public:
+			Iter(u32 ind, std::array<std::tuple<KeyType, ValueType>, elements>& arr) :
+				ind(ind),
+				arr(arr)
+			{
+			}
+
 			Iter operator++()
 			{
 				return ++ind;
@@ -36,12 +42,17 @@ namespace Game
 
 		auto begin()->Iter
 		{
-			return _data.begin();
+			return Iter(0, _data);
 		}
 
 		auto end()->Iter
 		{
-			return _data.end();
+			return Iter(elements, _data);
+		}
+
+		std::array<std::tuple<KeyType, ValueType>, elements>const& data()
+		{
+			return _data;
 		}
 
 		template<typename HashFunction>
@@ -59,12 +70,12 @@ namespace Game
 		template<typename HashFunction>
 		auto get(KeyType const& key, HashFunction hash)noexcept->ValueType
 		{
-			if (auto index = binary_search(_data.begin(), _data.end(), std::make_tuple(key, _cached), [&](std::tuple<KeyType, ValueType> const& x, std::tuple<KeyType, ValueType> const& y)
+			if (auto index = binary_search(_dataKeys.begin(), _dataKeys.end(), key, [&](KeyType const& x, KeyType const& y)
 			{
-				return hash(std::get<KeyType>(x)) < hash(std::get<KeyType>(y));
+				return hash(x) < hash(y);
 			}))
 			{
-				return std::get<ValueType>(_data[index]);
+				return _dataValues[index];
 			}
 			else
 			{
@@ -73,13 +84,15 @@ namespace Game
 		}
 
 	private:
-		std::array<std::tuple<KeyType, ValueType>, elements> _data;
+		std::array<KeyType, elements> _dataKeys;
+		std::array<ValueType, elements> _dataValues;
+
 		u32 _fill = 0;
 
 		ValueType _cached;
 
-		template<class ForwardIt, class T, class Compare>
-		std::optional<u32> binary_search(ForwardIt first, ForwardIt last, const T& value, Compare comp)
+		template<class ForwardIt, class TypeToGetIndexOf, class Compare>
+		std::optional<u32> binary_search(ForwardIt first, ForwardIt last, const TypeToGetIndexOf& value, Compare comp)
 		{
 			first = std::lower_bound(first, last, value, comp);
 			if (!(first == last) && !(comp(value, *first)))
