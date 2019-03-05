@@ -38,9 +38,6 @@
     <ClInclude Include="Components.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Meta.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entity.hpp">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
@@ -55,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="ArchetypeContainer.hpp">
       <Filter>Header Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="static_map.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

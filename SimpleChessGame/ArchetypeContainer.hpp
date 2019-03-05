@@ -80,9 +80,9 @@ namespace Game
 			}
 		}
 
-		auto GetComponentIndices()
+		auto ContainsComponent(componentIndex comp)->bool
 		{
-
+			return _map.contains(comp, Hash);
 		}
 
 		template<typename ComponentType>

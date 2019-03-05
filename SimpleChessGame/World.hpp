@@ -124,10 +124,9 @@ namespace Game
 			// get vector of archetypes with appropriate size
 			auto archetypeVect = std::get<sizeof...(Components)>(_archetypeByComponentCount);
 
-			auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [](auto archetype)
+			auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [](ArchetypeContainer<sizeof...(Components)> archetype)
 			{
-
-				((get_type_index<Components, allComponents>::value), ...)
+				return (archetype.ContainsComponent(get_type_index<Components, allComponents>::value + 1) && ...);
 			});
 			if (res != archetypeVect.end())
 			{
