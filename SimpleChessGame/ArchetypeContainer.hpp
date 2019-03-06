@@ -16,6 +16,8 @@ namespace Game
 	public:
 		using u32 = Engine::Types::u32;
 		using componentIndex = u32;
+		using SimplestHash = Engine::Misc::SimplestHash<u32>;
+
 		static constexpr u32 componentsCount = ComponentsCount;
 
 		class ICanBecomeDangling
@@ -35,7 +37,7 @@ namespace Game
 			public ICanBecomeDangling
 		{
 		public:
-			TotallySafeArrayWrapper(char* ptr, size_t size) :
+			TotallySafeArrayWrapper(std::byte* ptr, size_t size) :
 				_ptr(reinterpret_cast<CompType*>(ptr)),
 				_size(size)
 			{
@@ -67,30 +69,31 @@ namespace Game
 			size_t _size;
 		};
 
-
-		ArchetypeContainer()
+		ArchetypeContainer() :
+			_map(SimplestHash())
 		{
 		}
 
-		ArchetypeContainer(std::array<componentIndex, ComponentsCount> componentIds)
+		ArchetypeContainer(std::array<std::tuple<componentIndex, size_t>, ComponentsCount> componentIds) :
+			_map(SimplestHash())
 		{
-			for (componentIndex elem : componentIds)
+			for (std::tuple<componentIndex, size_t> elem : componentIds)
 			{
-				_map.insert(elem, std::make_tuple(std::vector<char>(), 0));
+				_map.insert(std::move(std::get<0>(elem)), std::make_tuple(std::vector<std::byte>(), std::get<1>(elem)));
 			}
 		}
 
 		auto ContainsComponent(componentIndex comp)->bool
 		{
-			return _map.contains(comp, Hash);
+			return _map.contains(comp);
 		}
 
 		template<typename ComponentType>
 		auto GetComponentArray(componentIndex componentId)->TotallySafeArrayWrapper<ComponentType>&
 		{
-			auto tpl = _map.get(componentId, Hash);
+			auto tpl = _map.get(componentId);
 
-			std::vector<char> vect = std::get<0>(tpl);
+			std::vector<std::byte> vect = std::get<0>(tpl);
 			size_t size = std::get<1>(tpl);
 
 			size_t elementCount = vect.size() / sizeof(ComponentType);
@@ -105,7 +108,7 @@ namespace Game
 
 		auto AddEntity(Entity entity, std::array<std::tuple<componentIndex, size_t>, ComponentsCount> entityComponents)->void
 		{
-			for (auto wrapper : _wrappers)
+			for (auto& wrapper : _wrappers)
 				wrapper->SetIsNowDangling();
 
 			for (auto element : entityComponents)
@@ -113,19 +116,19 @@ namespace Game
 				componentIndex index = std::get<0>(element);
 				size_t elementSize = std::get<1>(element);
 
-				std::vector<char> storageVector = std::get<0>(_map.get(index, Hash));
-				size_t storageElementSize = std::get<1>(_map.get(index, Hash));
+				std::vector<std::byte> storageVector = std::get<0>(_map.get(index));
+				size_t storageElementSize = std::get<1>(_map.get(index));
 
 				if (elementSize != storageElementSize)
 					std::terminate();
 
 				for (size_t i = 0; i < elementSize; i++)
-					storageVector.push_back(0);
+					storageVector.push_back(std::byte(0));
 			}
 			_entities.push_back(entity);
 		}
 
-		auto SetEntityComponents(Entity entity, std::array<std::tuple<componentIndex, void*>, ComponentsCount> components)->void
+		auto SetEntityComponents(Entity entity, std::array<std::tuple<componentIndex, std::byte*>, ComponentsCount> components)->void
 		{
 			for (auto element : components)
 			{
@@ -134,8 +137,8 @@ namespace Game
 
 				size_t entityInd = Engine::Misc::find_index_of(_entities.begin(), _entities.end(), entity);
 
-				auto vect = std::get<0>(_map.get(index, Hash));
-				auto size = std::get<1>(_map.get(index, Hash));
+				auto vect = std::get<0>(_map.get(index));
+				auto size = std::get<1>(_map.get(index));
 
 				auto ind = entityInd * size;
 
@@ -148,7 +151,7 @@ namespace Game
 
 		auto RemoveEntity(Entity entity)->void
 		{
-			for (auto wrapper : _wrappers)
+			for (auto& wrapper : _wrappers)
 				wrapper->SetIsNowDangling();
 
 			size_t entityInd = Engine::Misc::find_index_of(_entities.begin(), _entities.end(), entity);
@@ -166,15 +169,10 @@ namespace Game
 		}
 
 	private:
-		static_map<componentIndex, std::tuple<std::vector<char>, size_t>, ComponentsCount> _map;
+		static_map<componentIndex, std::tuple<std::vector<std::byte>, size_t>, ComponentsCount, SimplestHash> _map;
 
 		std::vector<Entity> _entities;
 
 		std::vector<std::unique_ptr<ICanBecomeDangling>> _wrappers;
-
-		componentIndex Hash(componentIndex x)
-		{
-			return x;
-		}
 	};
 }

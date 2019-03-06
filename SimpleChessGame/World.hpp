@@ -23,6 +23,7 @@ namespace Game
 
 		// all systems must inherit from ISystem
 		static_assert(is_all_true<is_derived_from<ISystem, Systems>::value...>);
+
 	public:
 		using u32 = Engine::Types::u32;
 
@@ -41,37 +42,39 @@ namespace Game
 
 
 
-
+			throw std::exception("not implemented");
 		}
 
 		template<typename Component>
 		auto AddComponent(Entity entity, Component value)->void
 		{
-			std::get<std::vector<Component>>(_components).push_back(value);
+			//std::get<std::vector<Component>>(_components).push_back(value);
+			throw std::exception("not implemented");
 		}
 
 		template<typename Component>
 		auto RemoveComponent(Entity entity)->void
 		{
-			auto comps = std::get<std::vector<Component>>(_components);
-			auto res = std::find_if(comps.begin(), comps.end(), [entity](auto value)
-			{
-				return value.entity.ind == entity.ind;
-			});
-			if (res != comps.end())
-			{
-				comps.erase(res);
-			}
-			else
-			{
-				throw std::exception("component does not exist on provided entity");
-			}
+			//auto comps = std::get<std::vector<Component>>(_components);
+			//auto res = std::find_if(comps.begin(), comps.end(), [entity](auto value)
+			//{
+			//	return value.entity.ind == entity.ind;
+			//});
+			//if (res != comps.end())
+			//{
+			//	comps.erase(res);
+			//}
+			//else
+			//{
+			//	throw std::exception("component does not exist on provided entity");
+			//}
+			throw std::exception("not implemented");
 		}
 
 		template<typename Component>
 		auto SetComponent(Entity entity, Component newValue)->void
 		{
-			std::get<std::vector<Component>>(_components);
+			//std::get<std::vector<Component>>(_components);
 			throw std::exception("not implemented");
 		}
 

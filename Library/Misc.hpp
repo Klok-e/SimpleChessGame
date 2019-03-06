@@ -21,4 +21,13 @@ namespace Engine::Misc
 				return count;
 			}
 	}
+
+	template<typename T>
+	struct SimplestHash
+	{
+		T operator()(T x)
+		{
+			return x;
+		}
+	};
 }

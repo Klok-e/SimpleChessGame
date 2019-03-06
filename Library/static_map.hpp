@@ -184,6 +184,5 @@ namespace Game
 				CHECK(cont);
 			}
 		}
-
 	}
 }
