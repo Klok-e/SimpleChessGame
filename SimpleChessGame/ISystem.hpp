@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ComponentIterator.hpp"
+
 namespace Game
 {
 	template<typename BoolTypeNeedEntity, typename ...ComponentsRequires>
@@ -12,13 +14,13 @@ namespace Game
 		using delta_t = Engine::Types::f64;
 
 		template<bool is_enabled = !needEntity>
-		auto Update(typename std::enable_if_t<is_enabled, delta_t> deltaTime, std::tuple<ComponentsRequires...> components)->void
+		auto Update(std::enable_if_t<is_enabled, delta_t> deltaTime, std::tuple<ComponentArray<ComponentsRequires>...>& components)->void
 		{
 			std::terminate();
 		}
 
 		template<bool is_enabled = needEntity>
-		auto Update(typename std::enable_if_t<is_enabled, Entity> const& entity, delta_t deltaTime, std::tuple<ComponentsRequires...> components)->void
+		auto Update(std::enable_if_t<is_enabled, ComponentArray<Entity>&> entity, delta_t deltaTime, std::tuple<ComponentArray<ComponentsRequires>...>& components)->void
 		{
 			std::terminate();
 		}

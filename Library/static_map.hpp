@@ -28,12 +28,12 @@ namespace Game
 			return _dataValues.end();
 		}
 
-		std::tuple<std::array<KeyType, Elements>, std::array<ValueType, Elements>> const& data()
+		std::tuple<std::array<KeyType, Elements>, std::array<ValueType, Elements>> const& data()const
 		{
 			return std::make_tuple(_dataKeys, _dataValues);
 		}
 
-		bool contains(KeyType const& key)
+		bool contains(KeyType const& key)const
 		{
 			return binary_search(_dataKeys.cbegin(), _dataKeys.cend(), key, [&](KeyType const& x, KeyType const& y)
 			{
@@ -41,17 +41,37 @@ namespace Game
 			}).has_value();
 		}
 
+		std::array<KeyType, Elements>const& get_keys()const
+		{
+			return _dataKeys;
+		}
+
+		std::array<ValueType, Elements>const& get_values()const
+		{
+			return _dataValues;
+		}
+
 		void insert(KeyType&& key, ValueType&& value)noexcept
 		{
 			if (_fill >= Elements)
 				std::terminate();
+
+			// keys must not repeat
+			if (binary_search(_dataKeys.begin(), _dataKeys.begin() + _fill, key, [&](KeyType const& x, KeyType const& y)
+			{
+				return _hash(x) < _hash(y);
+			}))
+			{
+				std::cerr << "\nError: map {" << typeid(*this).name() << "} already has key with hash {" << _hash(key) << "}\n";
+				std::terminate();
+			}
 
 			// sort the shit out of it
 			auto res = std::lower_bound(_dataKeys.begin(), _dataKeys.begin() + _fill, key, [&](KeyType const& x, KeyType const& y)
 			{
 				return _hash(x) < _hash(y);
 			});
-			u32 index = res - _dataKeys.begin();
+			auto index = res - _dataKeys.begin();
 
 			std::move_backward(_dataKeys.begin() + index, _dataKeys.begin() + _fill, _dataKeys.begin() + _fill + 1);
 			std::move_backward(_dataValues.begin() + index, _dataValues.begin() + _fill, _dataValues.begin() + _fill + 1);
@@ -61,7 +81,20 @@ namespace Game
 			_fill += 1;
 		}
 
-		ValueType get(KeyType const& key)noexcept
+		ValueType& get(KeyType const& key)noexcept
+		{
+			if (std::optional<u32> index = binary_search(_dataKeys.begin(), _dataKeys.end(), key, [&](KeyType const& x, KeyType const& y)
+			{
+				return _hash(x) < _hash(y);
+			}))
+			{
+				return _dataValues[index.value()];
+			}
+			else
+				std::terminate();
+		}
+
+		ValueType const& get(KeyType const& key)const noexcept
 		{
 			if (std::optional<u32> index = binary_search(_dataKeys.begin(), _dataKeys.end(), key, [&](KeyType const& x, KeyType const& y)
 			{
@@ -72,6 +105,7 @@ namespace Game
 			}
 			else
 			{
+				std::cerr << "yo mum gay key's not present in the static_map " << typeid(*this).name();
 				std::terminate();
 			}
 		}
@@ -82,14 +116,14 @@ namespace Game
 		}
 
 	private:
-		std::array<KeyType, Elements> _dataKeys;
-		std::array<ValueType, Elements> _dataValues;
-		Hash _hash;
+		std::array<KeyType, Elements> _dataKeys{};
+		std::array<ValueType, Elements> _dataValues{};
+		Hash const _hash;
 
 		u32 _fill = 0;
 
 		template<class ForwardIt, class TypeToGetIndexOf, class Compare>
-		std::optional<u32> binary_search(ForwardIt first, ForwardIt last, const TypeToGetIndexOf& value, Compare comp)
+		std::optional<u32> binary_search(ForwardIt first, ForwardIt last, const TypeToGetIndexOf& value, Compare comp)const
 		{
 			auto find = std::lower_bound(first, last, value, comp);
 			if (!(find == last) && !(comp(value, *find)))

@@ -8,16 +8,18 @@ namespace Game
 	{
 		Engine::Types::u32 ind = 0;
 
-		template<typename ComponentTypesTuple, typename SystemsTuple>
-		friend class World;
-
 	public:
 		Entity(Engine::Types::u32 ind) :
 			ind(ind)
 		{
 		}
 
-		bool operator==(Entity const& other)
+		Engine::Types::u32 GetIndex()
+		{
+			return ind;
+		}
+
+		bool operator==(Entity const& other)const
 		{
 			return ind == other.ind;
 		}

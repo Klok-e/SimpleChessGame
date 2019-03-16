@@ -95,6 +95,9 @@
     <PostBuildEvent>
       <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
     </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -110,6 +113,9 @@
     <PostBuildEvent>
       <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
     </PostBuildEvent>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +133,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
@@ -148,6 +155,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /I $(ProjectDir)Sprites256px $(OutDir)Sprites256px</Command>
@@ -158,12 +166,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArchetypeContainer.hpp" />
+    <ClInclude Include="ComponentIterator.hpp" />
     <ClInclude Include="Components.hpp" />
     <ClInclude Include="Constants.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="ISystem.hpp" />
     <ClInclude Include="RenderSystem.hpp" />
     <ClInclude Include="Resources.hpp" />
+    <ClInclude Include="TotallySafeArray.hpp" />
     <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>

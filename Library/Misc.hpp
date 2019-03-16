@@ -11,23 +11,17 @@ namespace Engine::Misc
 			function(opt.value);
 	}
 
-	template<typename InputIter, typename ToFindType>
-	auto find_index_of(InputIter begin, InputIter end, ToFindType const& value)->size_t
-	{
-		size_t count = 0;
-		for (InputIter i = begin; i != end; i++, count++)
-			if (value == *i)
-			{
-				return count;
-			}
-	}
-
 	template<typename T>
 	struct SimplestHash
 	{
-		T operator()(T x)
+		T operator()(T x)const
 		{
 			return x;
 		}
 	};
+
+	constexpr auto to_u32(size_t x)->Engine::Types::u32
+	{
+		return static_cast<Engine::Types::u32>(x);
+	}
 }

@@ -34,6 +34,7 @@ auto main(int argc, char* argv[])->int
 
 	using namespace Engine;
 	using namespace Game;
+	using namespace Components;
 	try
 	{
 		sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
@@ -50,10 +51,12 @@ auto main(int argc, char* argv[])->int
 		//RenderSystem x;
 		//decltype(x)::componentsRequired;
 
-		World<std::tuple<Components::Renderable, Components::Position2D>,
-			std::tuple<RenderSystem>> world;
+		World<std::tuple<Renderable, Position2D>, std::tuple<RenderSystem, CoordPrinterSystem>> world;
 
-		world.CreateEntity(Components::Renderable(sf::Sprite(Resources::Inst().get_b_bishop_png_shadow_256px_png())));
+		auto ent = world.CreateEntity(Renderable(new sf::Sprite(Resources::Inst().get_b_bishop_png_shadow_256px_png())));
+
+		world.AddComponent(ent, Position2D(4, 2));
+		world.RemoveComponent<Position2D>(ent);
 
 		world.Update();
 

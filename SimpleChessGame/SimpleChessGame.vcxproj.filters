@@ -53,6 +53,12 @@
     <ClInclude Include="ArchetypeContainer.hpp">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="TotallySafeArray.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentIterator.hpp">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Sprites256px\b_bishop_png_shadow_256px.png">
