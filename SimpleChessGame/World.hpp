@@ -58,7 +58,7 @@ namespace Game
 			auto& archetype = FindArchetypeFullMatchOrCreate<Components...>();
 			archetype.AddEntity(newEnt);
 
-			(archetype.SetEntityComponent(newEnt, std::make_tuple(u32(GetComponentIndex<Components>()), (std::byte*)&values)), ...);
+			(archetype.SetEntityComponent(newEnt, std::make_tuple(GetComponentIndex<Components>(), (std::byte*)&values)), ...);
 
 			return newEnt;
 		}
@@ -67,7 +67,7 @@ namespace Game
 		auto AddComponent(Entity entity, Component value)->void
 		{
 			bool foundAnything = false;
-			static_foreach(_archetypeByComponentCount, [&](auto& archetypeVect)
+			static_foreach_if(_archetypeByComponentCount, [&](auto& archetypeVect)->bool
 			{
 				std::optional<size_t> entIndex;
 				auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [&](auto& archetype)
@@ -96,7 +96,8 @@ namespace Game
 						for (size_t i = 0; i < archetypeComponentsCount; i++)
 							arr[i] = ids[i];
 
-						arr[archetypeComponentsCount] = GetComponentIndex<Component>();
+						auto c = GetComponentIndex<Component>();
+						arr[archetypeComponentsCount] = c;
 
 						auto& newArchetype = FindArchetypeFullMatchOrCreate(arr);
 
@@ -111,10 +112,16 @@ namespace Game
 
 							newArchetype.SetEntityComponent(entity, std::make_tuple(id, component));
 						}
+						newArchetype.SetEntityComponent(entity, std::make_tuple(GetComponentIndex<Component>(), (std::byte const*)&value));
 
 						archetype.RemoveEntity(entIndex.value());
+
+						// no need to continue
+						return false;
 					}
 				}
+				// continue
+				return true;
 			});
 			if (!foundAnything)
 			{
@@ -127,7 +134,7 @@ namespace Game
 		auto RemoveComponent(Entity entity)->void
 		{
 			bool foundAnything = false;
-			static_foreach(_archetypeByComponentCount, [&](auto& archetypeVect)
+			static_foreach_if(_archetypeByComponentCount, [&](auto& archetypeVect)->bool
 			{
 				std::optional<size_t> entIndex;
 				auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [&](auto& archetype)
@@ -176,8 +183,13 @@ namespace Game
 						}
 
 						archetype.RemoveEntity(entIndex.value());
+
+						// no need to continue
+						return false;
 					}
 				}
+				// continue
+				return true;
 			});
 			if (!foundAnything)
 			{
@@ -190,7 +202,7 @@ namespace Game
 		auto SetComponent(Entity entity, Component newValue)->void
 		{
 			bool foundAnything = false;
-			static_foreach(_archetypeByComponentCount, [&](auto& archetypeVect)
+			static_foreach_if(_archetypeByComponentCount, [&](auto& archetypeVect)->bool
 			{
 				std::optional<size_t> entIndex;
 				auto res = std::find_if(archetypeVect.begin(), archetypeVect.end(), [&](auto& archetype)
@@ -204,7 +216,9 @@ namespace Game
 
 					auto& arch = *res;
 					arch.SetEntityComponent(entity, std::make_tuple(GetComponentIndex<Component>(), reinterpret_cast<std::byte const*>(newValue)));
+					return false;
 				}
+				return true;
 			});
 			if (!foundAnything)
 			{
@@ -283,12 +297,6 @@ namespace Game
 			// construct component iterators
 			std::tuple<ComponentArray<Components>...> arrays =
 				std::make_tuple(ComponentArray<Components>(std::get<std::vector<TotallySafeArrayWrapper<Components>*>>(tplOfArrayptrs))...);
-			//static_foreach(arrays, [&](auto& compArr)
-			//{
-			//	using compType = typename std::decay_t<decltype(compArr)>::componentType;
-			//
-			//	compArr = ComponentArray<compType>(std::move(std::get<std::vector<TotallySafeArrayWrapper<compType>*>>(tplOfArrayptrs)));
-			//});
 
 			auto entArr = ComponentArray<Entity>(std::move(entityArrays));
 
@@ -389,4 +397,78 @@ namespace Game
 			}
 		}
 	};
+
+	TEST_CASE("Test World")
+	{
+		struct Comp1 :
+			public IComponent
+		{
+			double v;
+			Comp1()
+			{
+			}
+
+			Comp1(double v) :
+				v(v)
+			{
+			}
+		};
+		struct Comp2 :
+			public IComponent
+		{
+			float v;
+			Comp2()
+			{
+			}
+
+			Comp2(float v) :
+				v(v)
+			{
+			}
+		};
+		struct Comp3 :
+			public IComponent
+		{
+			int v;
+			Comp3()
+			{
+			}
+
+			Comp3(int v) :
+				v(v)
+			{
+			}
+		};
+
+		class TestSyst1 :
+			public ISystem<std::true_type, Comp3>
+		{
+		public:
+			void Update(ComponentArray<Entity>& entities, delta_t deltaTime, std::tuple<ComponentArray<Comp3>>& components)
+			{
+				auto&[x] = components;
+				CHECK(x[0].v == 12);
+			}
+		};
+
+		class TestSyst2 :
+			public ISystem<std::true_type, Comp1, Comp3>
+		{
+		public:
+			void Update(ComponentArray<Entity>& entities, delta_t deltaTime, std::tuple<ComponentArray<Comp1>, ComponentArray<Comp3>>& components)
+			{
+				auto&[x1, x2] = components;
+				CHECK(x2[0].v == 12);
+				CHECK(x1[0].v == 140.);
+			}
+		};
+
+		World<std::tuple<Comp1, Comp2, Comp3>, std::tuple<TestSyst1, TestSyst2>> world;
+
+		auto ent = world.CreateEntity(Comp1{140.});
+
+		world.AddComponent(ent, Comp3{12});
+
+		world.Update();
+	}
 }

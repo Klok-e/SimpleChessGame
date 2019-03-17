@@ -32,6 +32,16 @@ namespace Game
 			(f(std::get<Is>(t)), ...);
 	}
 
+	template<bool PassInIndex = false, class Tup, class Func, std::size_t ...Is>
+	constexpr void static_apply_with_indices_if(Tup& t, std::index_sequence<Is...> indices, Func &&f)
+	{
+		// if one of the operands retuns false, then nothing after it isn't evaluated
+		if constexpr (PassInIndex)
+			(f(std::integral_constant<std::size_t, Is>{}, std::get<Is>(t)) && ...);
+		else
+			(f(std::get<Is>(t)) && ...);
+	}
+
 	template <class ... TypeToGetIndexOf, class Func >
 	constexpr void static_for(std::tuple<TypeToGetIndexOf...>&t, Func &&f)
 	{
@@ -42,6 +52,12 @@ namespace Game
 	constexpr void static_foreach(std::tuple<TypeToGetIndexOf...>&t, Func &&f)
 	{
 		static_apply_with_indices(t, std::make_index_sequence<sizeof...(TypeToGetIndexOf)>(), std::forward<Func>(f));
+	}
+
+	template <class ... TypeToGetIndexOf, class Func >
+	constexpr void static_foreach_if(std::tuple<TypeToGetIndexOf...>&t, Func &&f)
+	{
+		static_apply_with_indices_if(t, std::make_index_sequence<sizeof...(TypeToGetIndexOf)>(), std::forward<Func>(f));
 	}
 
 	template<template<class...> class Base, class Derived>
